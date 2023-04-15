@@ -1,0 +1,481 @@
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tbjwHeader}[2021/03/12 TBJW Custom Header Package]
+
+%% First the package includes
+\RequirePackage{etoolbox}
+\RequirePackage{ifdraft}
+
+
+
+%% Unfortunately, the following three packages are buggy. They cause an error on my machine (office Mac Pro)  unless
+%% loaded in this order hyperref, amsrefs, showkeys. Then there is a further bug in how amsrefs interacts with shokeys
+%% in 'final' mode. Showkeys should do nothing, but amsrefs doesn't respect this (as far as I can tell) so we inster
+%% code to avoid loading showkeys if the 'final' option is set.
+
+\RequirePackage[colorlinks=true, citecolor=green!50!black, linkcolor=red!50!black, pagebackref=false, final]{hyperref}
+
+\ifdraft{\RequirePackage[color,notref, notcite]{showkeys}}{}
+\RequirePackage[letterpaper, left=32mm, right=22mm]{geometry}
+\RequirePackage{xargs}
+\RequirePackage{amsmath, amsthm, mathrsfs, amssymb}
+\RequirePackage{xypic}
+\RequirePackage{tikz-cd} 
+\RequirePackage{graphicx}
+\RequirePackage{enumitem}
+\RequirePackage{bm}
+\RequirePackage{xcolor}
+\RequirePackage[en-AU]{datetime2}
+\RequirePackage[T1]{fontenc}
+
+\ifcscounter{chapter}{%
+        \RequirePackage{imakeidx}
+        }%
+        {%
+        }
+
+
+
+\RequirePackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes} % This package can be troublesome
+
+
+\DeclareOption{bbold}{
+  \renewcommand{\mathbx}[1]{\mathbb{#1}}
+}
+\DeclareOption{boldface}{
+  \providecommand{\mathbx}[1]{\mathbf{#1}}
+}
+
+
+\ExecuteOptions{boldface}
+
+\ProcessOptions\relax
+
+
+\renewcommand*{\showkeyslabelformat}[1]{%
+   {\tiny #1}\par}
+
+%% Now the theorem definitions
+
+\theoremstyle{plain}
+\ifcscounter{chapter}{%
+        \newtheorem{thm}{Theorem}[chapter]%
+        }%
+        {%
+        \newtheorem{thm}{Theorem}[section]%
+        }
+\newtheorem{theorem}[thm]{Theorem}
+\newtheorem{scholium}[thm]{Scholium}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{corollary}[thm]{Corollary}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{prp}[thm]{Proposition}
+\newtheorem{proposition}[thm]{Proposition}
+
+\newtheorem*{claim*}{Claim} %Claim
+\newtheorem*{thm*}{Theorem}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{definition}[thm]{Definition}
+\newtheorem{construction}[thm]{Construction}
+\newtheorem{notation}[thm]{Notation}
+\newtheorem{convention}[thm]{Convention}
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{extension}[thm]{Extension}
+\newtheorem{ex}[thm]{Example}
+\newtheorem{example}[thm]{Example}
+\newtheorem{entry}[thm]{}
+\newtheorem{claim}[thm]{Claim}
+\newtheorem{question}[thm]{Question}
+\newtheorem{problem}[thm]{Problem}
+\newtheorem{answer}[thm]{Answer}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{conjecture}[thm]{Conjecture}
+\newtheorem{exercise}[thm]{Exercise}
+
+
+%% The definitions that change between Blackboard Bold and Bold:
+
+
+\newcommand{\C}{\mathbx{C}}
+\newcommand{\N}{\mathbx{N}}
+\newcommand{\Q}{\mathbx{Q}}
+\newcommand{\R}{\mathbx{R}}
+\newcommand{\Z}{\mathbx{Z}}
+\newcommand{\M}{\mathbx{M}}
+\newcommand{\G}{\mathbx{G}}
+\newcommand{\A}{\mathbx{A}}
+\newcommand{\F}{\mathbx{F}}
+
+\newcommand{\CC}{\C}
+\newcommand{\NN}{\N}
+\newcommand{\QQ}{\Q}
+\newcommand{\RR}{\R}
+\newcommand{\ZZ}{\Z}
+\newcommand{\MM}{\M}
+\newcommand{\GG}{\G}
+\newcommand{\FF}{\F}
+
+\newcommand{\PP}{\mathbx{P}}
+\newcommand{\HH}{\mathbx{H}}
+
+\newcommand{\Gm}{\G_m}
+\newcommand{\aone}{\A^1}
+\newcommand{\Aone}{\aone}
+\newcommand{\pone}{\P^1}
+
+
+
+
+
+%% Now, in no particular order, the math definitions. Come back later and tidy this up.
+
+
+
+\newcommand{\codim}{\operatorname{codim}}
+
+% Homological Algebra
+\newcommand{\bb}{\bullet}
+\newcommand{\Tot}{\operatorname{Tot}}
+\newcommand{\Tor}{\operatorname{Tor}}
+\newcommand{\Ext}{\operatorname{Ext}}
+\newcommand{\ch}{\mathbf{Ch}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Alt}{\bigwedge}        
+\newcommand{\idl}[1]{\mathfrak{#1}}
+\newcommand{\EA}{\Lambda}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Sl}{\operatorname{SL}}
+\newcommand{\SL}{\operatorname{SL}}
+
+\newcommand{\alg}{\textrm{alg}}
+\newcommand{\Gl}{\operatorname{GL}}
+\newcommand{\Mat}{\operatorname{Mat}}
+\newcommand{\diag}[1]{\operatorname{diag}\left({#1}\right)}
+
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Span}{\operatorname{Span}}
+\renewcommand{\d}[1]{\widehat{#1}}
+\newcommand{\gd}[1]{\overline{#1}}
+
+
+\newcommand{\U}{\operatorname{U}}
+\newcommand{\SU}{\operatorname{SU}}
+\newcommand{\PSU}{\operatorname{PSU}}
+\newcommand{\OG}{\operatorname{O}}
+\newcommand{\Og}{\OG}
+\newcommand{\PO}{\operatorname{PO}}
+\newcommand{\PSp}{\operatorname{PSp}}
+\newcommand{\PGL}{\operatorname{PGL}}
+
+\newcommand{\Tr}{\operatorname{Tr}}
+
+% Category Theory
+\newcommand{\iHom}{\cat{Hom}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\colim}{\operatornamewithlimits{colim}}
+\newcommand{\cat}[1]{\text{\bf #1}}
+\newcommand{\stack}[1]{{\mathscr #1}}
+\newcommand{\Sets}{\cat{Sets}}
+\newcommand{\Pre}{\cat{Pre}}
+\newcommand{\tensor}{\otimes}
+\newcommand{\into}{\hookrightarrow}
+
+\newcommand{\Ob}{\operatorname{Ob}}
+\newcommand{\coequal}{\operatornamewithlimits{coeq}}
+
+\newcommand{\inv}{\operatorname{inv}}
+
+\newcommand{\spec}{\operatorname{Spec}}
+\newcommand{\Proj}{\operatorname{Proj}}
+\newcommand{\Spec}{\spec}
+
+
+\newcommand{\m}{\mathfrak{m}}
+
+\newcommand{\Sm}{\cat{Sm}}
+
+
+ 
+\newcommand{\pt}{\text{\rm pt}}
+
+\newcommand{\opensub}[1][{}]{\overset{#1}{\hookrightarrow}}
+\newcommand{\clsub}[1][{}]{\overset{#1}{\rightarrowtail}}
+
+\newcommand{\shom}{\mathcal{H}\!om}
+\newcommand{\sAut}{\mathcal{A}ut}
+\newcommand{\sPAut}{\mathcal{PA}ut}
+
+\newcommand{\Nis}{\text{\it Nis}}
+
+\newcommand{\Pic}{\operatorname{Pic}}
+\newcommand{\Cl}{\operatorname{Cl}}
+
+\newcommand{\Div}{\operatorname{div}}
+\renewcommand{\div}{\Div}
+\newcommand{\val}{\operatorname{val}}
+
+
+
+\renewcommand{\P}{\operatorname{P}}
+
+\newcommand{\sh}[1]{\mathcal{#1}}
+\newcommand{\dual}[1]{\check{#1}}
+
+
+\newcommand{\lspan}[1]{\left<#1\right>}
+
+
+\newcommand{\hocolim}{\operatornamewithlimits{hocolim}}
+\newcommand{\holim}{\operatornamewithlimits{holim}}
+
+\newcommand{\rh}{\tilde{H}}
+
+
+\newcommand{\sShv}{\cat{sShv}}
+
+\newcommand{\Ho}{\operatorname{Ho}}
+
+\newcommand{\rmod}[1][{R}]{\text{$#1$--mod}}
+
+\newcommand{\tr}{\text{\rm tr}}
+
+\newcommand{\heq}{\overset{\text{\rm h.e.}}{\simeq}}
+\newcommand{\qisom}{\overset{\text{\rm q.i.}}{\simeq}}
+\newcommand{\weq}{\simeq}
+\newcommand{\we}{\weq}
+\newcommand{\weqto}{\overset{\sim}{\to}}
+\newcommand{\PST}{\cat{PST}}
+\newcommand{\dcem}{{\cat{DM}^{\text{\rm eff},-}_{\text{\it Nis}}}}
+\newcommand{\dcegm}{{\cat{DM}^{\text{\rm eff}}_{\text{gm}}}}
+\newcommand{\dcm}{{\cat{DM}_{\text{\it Nis}}^{-}}}
+
+\newcommand{\smshp}{\wedge}
+
+\newcommand{\Sq}{\operatorname{Sq}}
+
+\newcommand{\Th}{\textit{Th}}
+
+\providecommand{\deg}{\operatorname{deg}}
+\providecommand{\weight}{\operatorname{wt}}
+\providecommand{\cht}{\operatorname{cht}}
+
+\newcommand{\sPre}{{\operatorname{s}\cat{Pre}}}
+
+\newcommand{\sProj}{\mathcal{P}\!\operatorname{roj}}
+\newcommand{\sSpec}{\mathcal{S}\!\operatorname{pec}}
+
+%\newcommand{\m}{\mathfrak{m}}
+
+\newcommand{\Spaces}{\cat{Spaces}}
+\newcommand{\sk}{\operatorname{sk}}
+\newcommand{\cone}{\operatorname{cone}}
+%\newcommand{\Nis}{\sh{Nis}}
+\newcommand{\Rlim}{\operatornamewithlimits{Rlim}}
+\renewcommand{\d}[1]{\hat{#1}}
+\newcommand{\tchh}[1]{\operatorname{tch}{#1}}
+\newcommand{\op}{\text{op}}
+\newcommand{\pre}{\text{pre}}
+\newcommand{\cqld}[6]{ {#1} \ar^{#4}@<0.5ex>[rr] \ar_{#5}@<-0.5ex>[rr]  & & {#2} \ar^{#6}[rr] & & {#3}}
+\newcommand{\cqd}[6]{ {#1} \ar^{#4}@<0.5ex>[r] \ar_{#5}@<-0.5ex>[r]  & {#2} \ar^{#6}[r]  & {#3}}
+\newcommand{\sectionMathHeading}{\protect{$\G_m \smash {\P^{n-1}_+} \to \Gl(n)$}}
+\newcommand{\dfnd}[1]{\index{#1}\textit{#1\/}}
+\newcommand{\GL}{\Gl}
+
+\newcommand{\CP}{\C\mathrm{P}}
+\newcommand{\RP}{\R\mathrm{P}}
+
+\newcommand{\ind}{\operatorname{ind}}
+\newcommand{\per}{\operatorname{per}}
+\newcommand{\PU}{\operatorname{PU}}
+\newcommand{\B}{{\operatorname{B}}}
+\newcommand{\Br}{\operatorname{Br}}
+\newcommand{\SO}{\operatorname{SO}}
+\newcommand{\Spin}{\operatorname{Spin}}
+
+
+\newcommand{\Eoh}{\mathrm{E}}
+
+\newcommand{\tors}{\textrm{tors}}
+
+
+\newcommand{\End}{\operatorname{End}}
+\newcommand{\As}{\mathscr{A}}
+
+\newcommand{\Hoh}{\mathrm{H}}
+
+
+\renewcommand{\top}{\mathrm{top}}
+
+\newcommand{\Map}{\operatorname{Map}}
+
+\newcommand{\BPGL}{{\B\PGL}}
+\newcommand{\BU}{{\B\U}}
+\newcommand{\BSO}{{\B\SO}}
+
+
+%% Algebraic geometry
+
+\newcommand{\SB}{\mathrm{SB}}
+\newcommand{\Sch}{\stack{Sch}}
+
+
+\newcommand{\sgn}{\operatorname{sign}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\isom}{\cong}
+\newcommand{\iso}{\isom}
+\newcommand{\natisom}{\approxeq}
+\newcommand{\mto}[1]{\stackrel{#1}{\longrightarrow}}
+\newcommand{\isomto}{\mto{\isom}}
+
+\newcommand{\sm}{\setminus}
+\newcommand{\onto}{\twoheadrightarrow}
+\newcommand{\ob}{\operatorname{ob}}
+
+
+
+
+
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\bd}{\partial}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\cl}[1]{\overline{#1}}
+
+\newcommand{\e}{\varepsilon}
+\renewcommand{\l}{\ell}
+
+\newcommand{\ip}[2]{\left< #1 , #2 \right>}
+\newcommand{\fin}{\text{finite}}
+
+\newcommand{\pd}[2]{\frac{\partial\, {#1}}{\partial{#2}}}
+\newcommand{\dd}[2]{\frac{d\, {#1}}{d{#2}}}
+
+
+
+\newcommand{\setof}[1]{\{ #1 \}}
+
+\newcommand{\hofib}{\operatorname{hofib}}
+\newcommand{\hocofib}{\operatorname{hocofib}}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\isomt}{{\stackrel{{\scriptscriptstyle{\sim}}}{\;\rightarrow\;}}}
+\newcommand{\smallsim}{{\scriptscriptstyle{\sim}}}
+\newcommand{\sma}{{\scriptstyle{\wedge}\,}}
+\newcommand{\longhookrightarrow}{\lhook\joinrel\longrightarrow}
+\newcommand{\longtwoheadrightarrow}{\relbar\joinrel\twoheadrightarrow}
+
+%\renewcommand{\O}{{\mathcal O}}
+\renewcommand{\hom}{\operatorname{Hom}}
+\newcommand{\Id}{\mathrm{id}}
+%\newcommand{\id}{\operatorname{id}}
+\newcommand{\EH}{\operatorname{EH}}
+\newcommand{\Xa}{{\mathcal{X}_{\underline{a}}}}
+\newcommand{\real}{{\mathbb R}}
+\newcommand{\cplx}{{\mathbb C}}
+\newcommand{\Stilde}{{\tilde{{\mathcal S}}}}
+\renewcommand{\1}{{\rm 1\hspace*{-0.4ex}%
+\rule{0.1ex}{1.52ex}\hspace*{0.2ex}}}
+
+\newcommand{\ga}{{{\mathbb G}_{a}}}
+\newcommand{\gm}[1]{{{\mathbb G}_{m}^{#1}}}
+\renewcommand{\L}{{\mathcal L}}
+\newcommand{\MW}{\mathrm{MW}}
+\newcommand{\So}{{\mathbb S}^0}
+\newcommand{\et}{\text{\'et}}
+\newcommand{\ho}[2][]{\mathscr{H}_{#1}({#2})}
+\newcommand{\hop}[1]{\mathscr{H}_{\bullet}({#1})}
+\newcommand{\DM}{{\mathbf{DM}}}
+\newcommand{\Sp}{{\mathrm{Sp}}}
+\newcommand{\bpi}{\bm{\pi}}
+\newcommand{\piaone}{{\bpi}^{\aone}}
+\newcommand{\Daone}{{\mathbf D}_{\aone}}
+\newcommand{\eff}{\operatorname{eff}}
+\newcommand{\Zar}{\operatorname{Zar}} % Zariski
+\newcommand{\SH}{{\mathbf{SH}}}
+\newcommand{\CH}{{\operatorname{CH}}}
+\newcommand{\Ch}{{\mathscr{Ch}}}
+\newcommand{\Fun}{\mathscr{Fun}}
+\renewcommand{\deg}{\operatorname{deg}}
+\newcommand{\tdeg}{\widetilde{\deg}}
+\newcommand{\Sigmas}{\mathfrak{S}}
+\newcommand{\switch}{\wp}
+
+\newcommand{\Shv}{{\mathscr{Shv}}}
+\newcommand{\Cor}{\mathscr{Cor}}
+\newcommand{\Spc}{\mathscr{Spc}}
+\newcommand{\Mod}{\cat{Mod}}
+\newcommand{\lMod}{\text{-}\cat{Mod}}
+\newcommand{\Ab}{\mathrm{Ab}}
+\newcommand{\Gr}{\mathrm{Gr}}
+\newcommand{\Set}{\mathscr{Set}}
+\newcommand{\K}{{{\mathbf K}}}
+\newcommand{\Faone}{{\mathbf{F}}_{\aone}}
+\newcommand{\Alg}{\operatorname{Alg}}
+\newcommand{\lAlg}{\operatorname{-Alg}}
+\newcommand{\<}[1]{{\langle}#1 {\rangle}}
+
+\newcommand{\cuppr}{\mathbin{\smile}}
+
+
+
+\newcommand{\simpspc}{\Delta^{\circ}\Spc}
+
+\newcommand{\limdir}{\underrightarrow {\operatorname{\mathstrut lim}}}
+\newcommand{\hsnis}{\mathscr{H}_s^{\Nis}(k)}
+\newcommand{\hspnis}{\mathscr{H}_{s,\bullet}^{\Nis}(k)}
+\newcommand{\hspet}{\mathscr{H}_{s,\bullet}^{\et}(k)}
+\newcommand{\hsptau}{\mathscr{H}_{s,\bullet}^{\tau}(k)}
+\newcommand{\hset}{\mathscr{H}_s^{\et}(k)}
+\newcommand{\hstau}{\mathscr{H}_s^{\tau}(k)}
+\newcommand{\het}[1]{\mathscr{H}^{\et}(#1)}
+\newcommand{\hpet}[1]{\mathscr{H}^{\et}_{\bullet}(#1)}
+\newcommand{\dkset}{{\mathfrak D}_k-{\mathcal Set}}
+\newcommand{\fkset}{{\mathcal F}_k-{\mathcal Set}}
+\newcommand{\fkrset}{{\mathcal F}_k^r-{\mathcal Set}}
+\newcommand{\Zn}{\Z \langle n \rangle}
+
+
+\newcommand{\simpnis}{{\Delta}^{\circ}\Shv_{\Nis}({\mathcal Sm}_k)}
+\newcommand{\simppre}{{{\Delta}^{\circ}\mathscr{Pre}({\mathcal Sm}_k)}}
+\newcommand{\shnis}{\Shv_{\Nis}({\mathcal Sm}_k)}
+\newcommand{\simpmod}{{\Delta}^{\circ}\Mod}
+\newcommand{\simpet}{{\Delta}^{\circ}\Shv_{\text{\'et}}({\mathcal Sm}_k)}
+\newcommand{\simptau}{{\Delta}^{\circ}\Shv_{\tau}({\mathcal Sm}_k)}
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
+
+\newcommand{\hy}{\textrm{-}}
+
+
+\newcommand{\Loc}{\mathrm{L}}
+\newcommand{\Laone}{\Loc_{\aone}}
+
+\newcommand{\kbar}{{\overline{k}}}
+\newcommand{\Et}{\mathrm{\acute{E}t}}
+\newcommand{\Tors}{\cat{Tors}}
+\newcommand{\Sh}{\cat{Sh}}
+\newcommand{\Gal}{\mathrm{Gal}}
+
+\newcommand{\homeo}{\approx}
+\newcommand{\an}{\mathrm{an}}
+\newcommand{\fppf}{\mathrm{fppf}}
+
+\newcommand{\Mor}{\operatorname{Mor}}
+
+
+\newcommand{\rset}[1]{\cat{Set}\text{-}{#1}}
+\newcommand{\rev}{\leftarrow}
+\newcommand{\const}{\operatorname{const}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\ev}{\textit{ev}}
+
+\endinput
+%%% Local Variables:
+%%% mode: plain-tex
+%%% TeX-master: t
+%%% End:
